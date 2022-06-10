@@ -1,0 +1,89 @@
+import styles from './styles.modules.css';
+import {Link} from 'react-router-dom'
+import { useState } from 'react';
+import axios from 'axios'
+const Login = () => {
+    const[data,setData] = useState({
+        email:"",
+        password:""
+    })
+    const [e, setE] = useState();
+    const [Validator, setValidator] = useState();
+    
+
+    const handleChange = ({currentTarget:input})=>{
+        setData({...data,[input.name]:input.value});
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            const url = 'http://localhost:3001/api/auth/login';
+            const {data:res} = await axios.post(url,data);
+            localStorage.setItem('token', res.data)
+            window.location = '/'
+            console.log(res.message);
+        }catch(e){
+            if(e.response && e.response.status >= 400 && e.response.status <= 500){
+                setE(e.response.data.message)
+            }
+
+            
+            
+        }
+
+    }
+    
+    return (
+        <div className={styles.login_container}>
+            <div className= {styles.login_form_container}>
+                <div className={styles.left}>
+                <form className={styles.form_container} onSubmit={handleSubmit}>
+                        <h1>Login to your account</h1>
+                         <input
+                         type="text" 
+                         placeholder='Email'
+                         name='email' 
+                         onChange={handleChange}
+                         value={data.email} 
+                         required 
+                         className={styles.input} />
+                         <input
+                         type="password" 
+                         placeholder='Password'
+                         name='password' 
+                         onChange={handleChange}
+                         value={data.password} 
+                         required 
+                         className={styles.input} />
+                        {e && <div className={styles.error_msg}>{e}</div>}
+                         
+                         <button type='submit' className={styles.green_btn}>
+                             Sign in
+                         </button>
+                    </form>
+                </div>
+                <div className={styles.right}>
+                <h1>New Here?</h1>
+                    <Link to='/signup'>
+                        <button type='button' className={styles.white_btn}>
+                            Signup
+                        </button>
+
+                    </Link>
+                    <h3>Forgot password</h3>
+                    <Link to='/forgot'>
+                        <button type='button' className={styles.white_btn}>
+                            Forgot
+                        </button>
+
+                    </Link>
+
+                    
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Login
