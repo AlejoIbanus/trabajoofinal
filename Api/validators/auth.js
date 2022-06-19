@@ -8,19 +8,27 @@ const validatorRegisterItem = [
     check('name')
     .exists()
     .notEmpty()
-    .isLength({min:3,max:99}),
+    .withMessage('El campo de tu nombre no puede estar vacio')
+    .isLength({min:3,max:99})
+    .withMessage('Tu nombre debe tener entre 3 y 99 caracteres'),
     check('age')
     .exists()
     .notEmpty()
-    .isNumeric(),
+    .withMessage('El campo de tu edad no puede estar vacio')
+    .isNumeric()
+    .withMessage('El campo de tu edad debe ser un numero'),
     check('password')
     .exists()
     .notEmpty()
-    .isLength({min:3,max:15}),
+    .withMessage('El campo de tu contraseña no puede estar vacio')
+    .isLength({min:3,max:15})
+    .withMessage('Tu contraseña debe tener entre 3 y 15 caracteres'),
     check('email')
     .exists()
     .notEmpty()
-    .isEmail(),
+    .withMessage('El campo de tu email no debe estar vacio')
+    .isEmail()
+    .withMessage('Tu email debe ser un email valido'),
 
 
     (req,res,next) => {

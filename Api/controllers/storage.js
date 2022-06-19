@@ -9,7 +9,7 @@ const MEDIAPATH = `${__dirname}/../storage`
 const getItems = async (req,res) => {
   try{
     const data =  await storageModel.find({});
-    res.send({data})
+    res.send(data)
   }catch(e){
     res.status(401).send({ message:'error en get items'})
   }
@@ -18,7 +18,7 @@ const getItem = async (req,res) => {
     try{
         const {id}= matchedData(req)
         const data =  await storageModel.findById(id);
-        res.send({data})
+        res.send(data)
       }catch(e){
         res.status(401).send({ message:'error en get item'})
       }
@@ -27,13 +27,14 @@ const getItem = async (req,res) => {
 
 const createItems = async (req,res) => {
   try{
-    const {body,file} = req
+    const {file,body} = req
     const fileData = {
         filename : file.filename,
-        url: `${URL}/${file.filename}`
+        url: `${URL}/${file.filename}`,
+        name: body.name
     }
     const data = await storageModel.create(fileData)
-    res.send({data})
+    res.send(data)
   }catch(e){
     res.status(401).send({ message:'error en create items'})
   }

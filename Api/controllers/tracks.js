@@ -18,7 +18,7 @@ const getItem = async (req,res) => {
     req = matchedData(req);
     const {id} = req;
     const data = await tracksModel.findById(id);
-    res.send({data});
+    res.send(data);
     }catch(e){
         res.status(401).send({ message:'error en get item'})
     }
@@ -27,8 +27,14 @@ const getItem = async (req,res) => {
 
 const createItems = async (req,res) => {
     try{
-    const body = matchedData(req);
-    const data = await tracksModel.create(body)
+    const {body,file} = matchedData(req);
+    const dataTrack= {
+        body,
+        filename : file.filename,
+        url: `${URL}/${file.filename}`
+    }
+    
+    const data = await tracksModel.create(dataTrack)
     res.send({data})
     } catch(e){
         res.status(401).send({ message:'error en create items'})

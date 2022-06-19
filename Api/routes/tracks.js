@@ -4,11 +4,12 @@ const router = express.Router();
 const {validatorCreateItems,validatorGetItem} = require('../validators/tracks')
 const authMiddleware = require('../middleware/session')
 const checkRol = require('../middleware/rol');
+const uploadMiddleware = require('../utils/handleStorage')
 // TODO https://localhost/tracks GET, POST, DELETE, PUT
 
-router.get('/',    getItems)
+router.get('/',authMiddleware, getItems)
 
-router.post('/', authMiddleware,   checkRol(['admin']), validatorCreateItems,createItems)
+router.post('/',authMiddleware,   checkRol(['admin']), validatorCreateItems,createItems)
 
 router.get('/:id',authMiddleware, validatorGetItem,getItem)
 

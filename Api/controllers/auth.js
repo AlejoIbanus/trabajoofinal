@@ -3,8 +3,8 @@ const {encrypt, compare} = require('../utils/handlePassword')
 const {tokenSign, verifyToken}= require('../utils/handleJwt')
 const {usersModel}= require('../models/index')
 const {transporter} = require('../config/nodemailer')
-const public_url = process.env.PUBLIC_URL;
-const mongo = require('mongoose')
+const public_url = 'http://localhost:3000';
+
 
 const registerController = async (req,res)=>{
     try{
@@ -46,6 +46,7 @@ try{
     user.set('password', undefined, {strict:false})
     const data = {
         token: await tokenSign(user,"2h"),
+        user
     }
     res.send({data})
 
@@ -67,7 +68,7 @@ const RecoveryControllerEmail = async (req,res) => {
             return
         }
         const token = await tokenSign(user,"10m")
-        const link = `${public_url}/api/auth/reset/${token}`
+        const link = `${public_url}/reset/${token}`
 
         await transporter.sendMail({
             from: '"Recuperacion de clave" <ibanusale@gmail.com>',
