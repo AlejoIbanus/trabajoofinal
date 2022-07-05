@@ -5,12 +5,9 @@ const uploadMiddleware = require('../utils/handleStorage')
 const {createItems, getItem, getItems, updateItems, deleteItems} = require('../controllers/storage')
 const {validatorGetItem} = require('../validators/storage')
 
-router.get('/', getItems )
-router.get('/:id',validatorGetItem, getItem)
-router.delete('/:id',validatorGetItem, deleteItems)
 
-router.post('/', uploadMiddleware.single('myfile'), createItems
-)
+router.get('/:id',validatorGetItem, getItem)
+
 
 
 module.exports = router;

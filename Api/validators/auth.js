@@ -41,11 +41,15 @@ const validatorLoginItem = [
     check('password')
     .exists()
     .notEmpty()
-    .isLength({min:3,max:15}),
+    .withMessage('La contraseña no puede estar vacia')
+    .isLength({min:3,max:15})
+    .withMessage('La clave debe tener entre 3 y 15 caracteres'),
     check('email')
     .exists()
     .notEmpty()
-    .isEmail(),
+    .withMessage('El email no puede estar vacio')
+    .isEmail()
+    .withMessage('Debe tener el formato de un email valido'),
 
     (req,res,next) => {
         return validateResults(req,res,next)
@@ -56,7 +60,9 @@ const validatorRecoveryEmailItem = [
     check('email')
     .exists()
     .notEmpty()
-    .isEmail(),
+    .withMessage('Este campo no puede enviarse vacio')
+    .isEmail()
+    .withMessage('El email debe ser un email valido'),
 
     (req,res,next) => {
         return validateResults(req,res,next)
@@ -67,7 +73,9 @@ const validatorReset = [
     check('password')
     .exists()
     .notEmpty()
-    .isLength({min:3,max:15}),
+    .withMessage('Este campo no puede enviarse vacio')
+    .isLength({min:3,max:15})
+    .withMessage('La clave debe tener entre 3 y 15 caracteres'),
     
 
     (req,res,next) => {

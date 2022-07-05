@@ -5,46 +5,64 @@ const tracksScheme = new mongoose.Schema(
         name: {
             type:String
         },
-        email:{
-            type:String,
-        },
-        cover:{
-            type:String,
-            validate:{
-               validator: (req)=>{
-                return true;
-            },
-            message:"error_url",
-        },
-    },  
         artist:{
-            name:{
-                type:String,
-            },
-            nickname:{
-                type:String,
-            },
-            nationality:{
-                type:String,
-            },
+            type:String
         },
-        duration:{
-            start:{
-                type:Number,
-            },
-            end:{
-                type:Number,
-            },
-
-        },
+        album : {
+            type:String
+                },
+                duration : {
+                    type:String
+                        },
         mediaId : {
-            type:String,
-        }
+            type:mongoose.Types.ObjectId
+                }
     },
         {
             versionKey:false,
             timestamps:true,
         }
 );
+
+tracksScheme.statics.findAllData = function(id){
+    const joinData = this.aggregate([
+        {
+            $lookup:{
+                from:'storages',
+                localField:'mediaId',
+                foreignField: '_id',
+                as:'audio',
+            },
+        },
+        {
+            $unwind:'$audio'
+        }
+    ])
+    return joinData
+}
+
+
+tracksScheme.statics.findOneData = function(id){
+    const joinData = this.aggregate([
+       {
+        $match:{
+            mediaId:mongoose.Types.ObjectId(id),
+        },
+       },
+       
+        {
+            $lookup:{
+                from:'storages',
+                localField:'mediaId',
+                foreignField: '_id',
+                as:'audio',
+            },
+        },
+        {
+            $unwind:'$audio'
+        }
+    ])
+    return joinData
+}
 tracksScheme.plugin(mongooseDelete,{overrideMethods:'all'});
 module.exports = mongoose.model("Tracks", tracksScheme)

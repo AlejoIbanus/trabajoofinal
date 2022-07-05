@@ -8,7 +8,7 @@ const public_url = 'http://localhost:3000';
 
 const registerController = async (req,res)=>{
     try{
-        req = matchedData(req);
+    req = matchedData(req);
     const password = await encrypt(req.password)
     const body = {...req, password}
     const dataUser = await usersModel.create(body)
@@ -20,7 +20,7 @@ const registerController = async (req,res)=>{
 
     }
     
-    res.send({data})
+    res.send(data)
 
     } catch(e){
         res.status(401).send({ message:'Ese email esta en uso'})
@@ -48,7 +48,7 @@ try{
         token: await tokenSign(user,"2h"),
         user
     }
-    res.send({data})
+    res.send(data)
 
 
 
@@ -92,7 +92,7 @@ const savedNewPass = async (req,res) => {
          const user = await verifyToken(token);
         const password = await encrypt(req.body.password);
         const newUser = await usersModel.findOneAndUpdate({"_id":user._id},{"password":password});
-        res.send({newUser})
+        res.send()
 
     }catch(e){
         res.status(401).send({ message:'error guardando la clave nueva'})
@@ -104,7 +104,7 @@ const resetController = async (req,res) => {
         const {token} = req.params;
         const user = await verifyToken(token);
         const newUser = await usersModel.find({"_id":user._id}).select('email name');
-        res.send({newUser})
+        res.send(newUser)
     }catch(e){
         res.status(401).send({ message:'error en reset '})
     }
